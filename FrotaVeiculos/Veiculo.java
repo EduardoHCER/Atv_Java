@@ -1,16 +1,14 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 public class Veiculo {
-
+    /* Atributos da classe */
     private String marca;
     private String modelo;
     private int anoFabricacao;
     private double combustivel;
     private double consumoMedio;
 
-    List<Veiculo> Frota = new ArrayList<>();
-
+    /* Construtor padrão */
     public Veiculo(String marca, String modelo, int anoFabricacao, double combustivel, double consumoMedio) {
         this.marca = marca;
         this.modelo = modelo;
@@ -19,6 +17,7 @@ public class Veiculo {
         this.consumoMedio = consumoMedio;
     }
 
+    /* Todos os Geter e Seters */
     public String getMarca() {
         return marca;
     }
@@ -59,35 +58,49 @@ public class Veiculo {
         this.consumoMedio = consumoMedio;
     }
 
-    public void calcularAutonomia() {
-        double autonomia = combustivel * consumoMedio;
-        System.out.println("Autonomia: " + autonomia);
+    /* Método calcularAutonomia para uso interno em outros métodos. */
+    public double calcularAutonomia() {
+        return combustivel * consumoMedio;
     }
 
+    /* Método exibir autonomia para imprima-la somente. */
+    public void exibirAutonomia() {
+        /* Uso de String.format para setar 2 casas decimais e Locale.US para usar ponto ao invés de vírgula. */
+        System.out.println("Autonomia: " + (String.format(Locale.US, "%.2f", calcularAutonomia())) + " km.");
+    }
+
+    /* Método precisaAbastecimento com boolean e If ternário direto na mensagem. */
+    public void precisaAbastecimento() {
+        boolean abastecer = false;
+        if (calcularAutonomia() < 30) {
+            abastecer = true;
+        }
+        System.out.println("Precisa de abastecimento: " + (abastecer ? "Sim" : "Não"));
+    }
+
+    /*
+     * Método realizar Viagem, calcula autonomia e compara com a distancia para
+     * exibir o resultado.
+     */
     public void realizarViagem(double distancia) {
-        double autonomia = combustivel * consumoMedio;
-        if (distancia > autonomia) {
+        System.out.println("Distancia da viagem: " + distancia + " km.");
+
+        if (distancia > calcularAutonomia()) {
             System.out.println("Impossível realizar a viagem!");
         } else {
             double consumido = distancia / consumoMedio;
             combustivel -= consumido;
             System.out.println("Viagem realizada com sucesso!");
-            System.out.println("Restaram " + String.format("%.2f", combustivel) + " litros de gasolina no tanque.");
+            System.out.println("Restaram " + String.format("%.2f", combustivel) + " litros de combustivel no tanque.");
         }
     }
 
     public void mostrarDetalhes() {
-        System.out
-                .println("Marca = " + getMarca() + ", modelo = " + getModelo() + ", anoFabricacao = "
-                        + getAnoFabricacao()
-                        + ", combustivel = " + getCombustivel() + ", consumoMedio = " + getConsumoMedio());
+        System.out.println();
+        System.out.println("--------------- Informações do veículo: ---------------");
+        System.out.println("Veículo: " + getMarca() + ", Modelo: " + getModelo());
+        System.out.println("Ano de fabricação: " + getAnoFabricacao());
+        System.out.println();
     }
-
-    public List<Veiculo> getFrota() {
-        return Frota;
-
-    }
-
-    
 
 }
